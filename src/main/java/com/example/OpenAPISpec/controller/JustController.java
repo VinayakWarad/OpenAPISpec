@@ -1,6 +1,7 @@
 package com.example.OpenAPISpec.controller;
 
 
+import com.example.OpenAPISpec.dto.StudentsDto;
 import com.example.OpenAPISpec.entity.Student;
 import com.example.OpenAPISpec.repository.StudentRepository;
 import com.example.OpenAPISpec.service.StudentService;
@@ -16,28 +17,29 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/students")
-@Validated
+@RequestMapping("/student")@Validated
 @Tag(
         name = "Student REST API's",
         description = "Student level API's"
 )
 public class JustController {
-    @Value("${student.class}")
-    private String studentclass;
 
     @Autowired
     StudentService studentService;
-    @Autowired
-    StudentRepository studentRepository;
 
-@GetMapping("/")
+
 public ResponseEntity<List<Student>> getAllStudents(){
      return new ResponseEntity<>(studentService.getAll(),HttpStatus.OK);
 }
 
-@GetMapping("/{name}")
-public ResponseEntity<Student> getAllStudentById(@PathVariable long id){
+//http://localhost:8080/swagger-ui/index.html#/
+    @PostMapping("/{id}/entry")
+public ResponseEntity<StudentsDto> saveStudent(@RequestBody StudentsDto dto){
+    return new ResponseEntity<>(studentService.saveStudent(dto),HttpStatus.OK);
+}
+
+@GetMapping("/{id}")
+public ResponseEntity<Student> isStudentExists(@PathVariable long id){
     Optional<Student> student=studentService.getById(id);
     return new ResponseEntity<>(student.get(),HttpStatus.OK);
 }

@@ -1,0 +1,143 @@
+openapi: 3.0.3
+
+info:
+  title: Student Demo
+  description: THis project is built to understand how openAPI works and what are the config required
+  version: ${targetVersion}
+
+servers:
+ - url: http://localhost:8080
+
+tags:
+  - name: students-rest-controller
+    description: Students REST Controller
+
+paths:
+# Below is example for post student based on his studentId
+  /student/{id}/entry:
+    post:
+      tags:
+        - students-rest-controller
+      summary: Posts / Saves Student details to DB
+      description:  |
+        Whenever newer student comes his entry will be present in DB        
+        Roles = place-with-third-party
+      operationId: saveStudent
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentsDto'
+      responses:
+        '200':
+          description: STudent saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentsDto'
+        '400':
+          $ref: "#/components/responses/400"
+        '401':
+          $ref: "#/components/responses/401"
+        '403':
+          $ref: "#/components/responses/403"
+
+# Below is example for get student based on his studentId
+  /student/{id}/dataexist:
+    get:
+      tags:
+        - students-rest-controller
+      summary: This API verifies whether the student record exists for the provided student ID.
+      description: |
+        This API verifies whether the student record exists for the provided student ID.         
+        The response indicates whether the record exists or not.
+
+        Roles =  view-student
+      operationId: isStudentExists
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Verification performed is successful.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+
+# Below is example for put student based on his studentId
+  /student/{studentId}/putStudent':
+    put:
+      tags:
+        -
+      summary: This API updates student record whenever there are major changes in field details
+      description:
+        This API updates student record whenever there are major changes in field details                
+        Role = students-rest-controller
+      operationId: updateStudent
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentsDto'
+      responses:
+        '200':
+          description: Students entry updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentsDto'
+        '400':
+          description: Problem Found Exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemResponse"
+        '401':
+          $ref: "#/components/responses/401"
+        '403':
+          $ref: "#/components/responses/403"
+
+# This is common component for responses
+components:
+  responses:
+    '400':
+      description: Bad Request
+    '401':
+      description: Unauthorized
+    '403':
+      description: Forbidden
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Student ID
+      required: true
+      style: simple
+      schema:
+        type: Long
+        example: 10
+  schemas:
+    StudentsDto:
+      title: StudentsDto
+      description: This DTO contains the information Student DTO
+      type: object
+      properties:
+        id:
+          type: Long
+          description: The third party ID for the account placement.
+          example: OCA1
+        studentAdddress:
+          type: String
+          description: Student Address
+          example: Koppal
