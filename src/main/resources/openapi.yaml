@@ -6,14 +6,14 @@ info:
   version: ${targetVersion}
 
 servers:
- - url: http://localhost:8080
+  - url: http://localhost:8080
 
 tags:
   - name: students-rest-controller
     description: Students REST Controller
 
 paths:
-# Below is example for post student based on his studentId
+  # Below is example for post student based on his studentId
   /student/{id}/entry:
     post:
       tags:
@@ -45,7 +45,7 @@ paths:
         '403':
           $ref: "#/components/responses/403"
 
-# Below is example for get student based on his studentId
+  # Below is example for get student based on his studentId
   /student/{id}/dataexist:
     get:
       tags:
@@ -73,15 +73,15 @@ paths:
         '403':
           $ref: '#/components/responses/403'
 
-# Below is example for put student based on his studentId
-  /student/{studentId}/putStudent':
+  # Below is example for put student based on his studentId
+  /student/{id}/putStudent:
     put:
       tags:
-        -
+        - students-rest-controller
       summary: This API updates student record whenever there are major changes in field details
       description:
-        This API updates student record whenever there are major changes in field details                
-        Role = students-rest-controller
+        This API updates student record whenever there are major changes in field details
+        Roles = students-rest-controller
       operationId: updateStudent
       parameters:
         - $ref: '#/components/parameters/id'
@@ -102,7 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProblemResponse"
+                $ref: "#/components/schemas/StudentsDto"
         '401':
           $ref: "#/components/responses/401"
         '403':
@@ -125,7 +125,7 @@ components:
       required: true
       style: simple
       schema:
-        type: Long
+        type: integer
         example: 10
   schemas:
     StudentsDto:
@@ -134,10 +134,10 @@ components:
       type: object
       properties:
         id:
-          type: Long
+          type: integer
           description: The third party ID for the account placement.
           example: OCA1
         studentAdddress:
-          type: String
+          type: string
           description: Student Address
           example: Koppal
